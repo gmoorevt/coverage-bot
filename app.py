@@ -20,11 +20,13 @@ def main():
     
     
     if pdf is not None:
+
         pdf_reader = PdfReader(pdf)
         text = ""
+        page_counter = 1
         for page in pdf_reader.pages:
             text += page.extract_text()
-
+            
         # split into chunkcs
         text_splitter = CharacterTextSplitter(
             separator="\n",
@@ -37,7 +39,6 @@ def main():
         # create embeddings
         embeddings = OpenAIEmbeddings()
         knowledge_base = FAISS.from_texts(chunks,embeddings)
-
         # show user input
         st.divider()
 
