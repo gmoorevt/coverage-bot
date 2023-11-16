@@ -13,9 +13,10 @@ from langchain.callbacks import get_openai_callback
 def main():
     load_dotenv()
     st.set_page_config(page_title='CareMetx PDF reader')
-    st.header('CareMetx coverage criteria bot 💬')
+    st.header('CareMetx Coverage Bot 💬')
+    st.text('Upload a benifit coverage PDF and then "ask" the bot questions about it')
 
-    pdf = st.file_uploader('upload pdf file', type=['pdf'])
+    pdf = st.file_uploader('Upload coverage pdf', type=['pdf'])
     
     
     if pdf is not None:
@@ -33,15 +34,14 @@ def main():
         )
         chunks = text_splitter.split_text(text)
 
-        st.write(chunks)
-
         # create embeddings
         embeddings = OpenAIEmbeddings()
         knowledge_base = FAISS.from_texts(chunks,embeddings)
 
         # show user input
-        
-        user_question = st.text_input("Ask questions to the document...")
+        st.divider()
+
+        user_question = st.text_input("Ask questions about the coverage...")
         
         if user_question:
 
@@ -54,7 +54,9 @@ def main():
                 print(cb)
             
             st.write(response)
-
-    
+        
+        # st.write("PDF Content Chunks")
+        # st.divider()
+        # st.json(chunks)
 if __name__ == '__main__':
     main()
