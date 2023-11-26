@@ -8,6 +8,8 @@ from langchain.llms import OpenAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.callbacks import get_openai_callback
 import docuploader
+import util
+
 
 
 
@@ -61,19 +63,35 @@ def readPDF2(pdf_reader):
             message_placeholder.markdown(full_response)
         st.session_state.messages.append({"role": "assistant", "content": full_response})   
        
+def set_debug():
+    st.session_state.debug = st.session_state.debug_check
+    
 
 
 def main():
     load_dotenv()
     st.set_page_config(page_title='CareMetx PDF reader')
     st.header('CareMetx Coverage Bot 💬')
+    
     if "benifit_file_slected" not in st.session_state:
         st.session_state.benifit_file_slected = False
     if "file_name" not in st.session_state:
         st.session_state.file_name = None
-    st.sidebar.write(st.session_state.file_name)
-    st.sidebar.write(st.session_state.benifit_file_slected)
-    st.sidebar.write(st.session_state)
+    if "debug" not in st.session_state:
+        st.session_state.debug = False
+
+    if st.session_state.debug:
+        util.util.debug_info()
+    
+    debug_check = st.sidebar.checkbox("Debug Mode",value=st.session_state.debug,key="debug_check")
+
+    if debug_check:
+        st.session_state.debug = True
+    else:
+        st.session_state.debug = False
+
+
+    
 
     
     

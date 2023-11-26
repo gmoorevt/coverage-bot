@@ -1,13 +1,18 @@
 import streamlit as st
+
 import docuploader
+import util
+
+
 
 # Page title
 st.set_page_config(page_title='Coverage Files')
 st.header('Coverage Files')
 
-st.sidebar.write(st.session_state.file_name)
-st.sidebar.write(st.session_state.benifit_file_slected)
-st.sidebar.write(st.session_state)
+if st.session_state.debug:
+    util.util.debug_info()
+    
+
 
 page_stale = False
 
@@ -18,6 +23,8 @@ def file_selection_on_change():
     st.session_state.file_name = st.session_state.file_selection
     st.session_state.benifit_file_slected = True
     st.toast(f"Selected file: {st.session_state.file_name}")
+    if "messages" in st.session_state:
+        st.session_state.messages = []
 
 def get_index_of_file(file_name,filelist):
     try:

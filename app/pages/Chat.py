@@ -8,15 +8,12 @@ from langchain.vectorstores import FAISS
 from langchain.llms import OpenAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.callbacks import get_openai_callback
-import docuploader
+import docuploader,util
 
 # Page title
 st.set_page_config(page_title='Chatbot')
 st.header('Chatbot')
 
-st.sidebar.write(st.session_state.file_name)
-st.sidebar.write(st.session_state.benifit_file_slected)
-st.sidebar.write(st.session_state)
 
 def readPDF2(pdf_reader):
 
@@ -39,18 +36,20 @@ def readPDF2(pdf_reader):
     embeddings = OpenAIEmbeddings()
     knowledge_base = FAISS.from_texts(chunks,embeddings)
     # end model
-     
+
+
+
     if "messages" not in st.session_state:
          st.session_state.messages = []
-    
+
     for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+        with st.chat_message(message["role"]): #chat_container
+            st.markdown(message["content"]) #chat_container
         
     if prompt := st.chat_input("Ask questions about the coverage..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
+        with st.chat_message("user"): #chat_container
+            st.markdown(prompt) #chat_container
 
         with st.chat_message("assistant"):
              
@@ -68,7 +67,14 @@ def readPDF2(pdf_reader):
             message_placeholder.markdown(full_response)
         st.session_state.messages.append({"role": "assistant", "content": full_response})   
 
+st.sidebar.divider()
+st.sidebar.subheader('Coverage File Loaded')
+st.sidebar.write(st.session_state.file_name)
+st.sidebar.markdown(docuploader.get_public_url(st.session_state.file_name),unsafe_allow_html=True)
 
+# Debug info
+if st.session_state.debug:
+        util.util.debug_info()
 
 
 placeholder = st.empty()

@@ -9,6 +9,8 @@ from io import BytesIO
 import requests
 import os
 import s3FileManager as s3fm 
+import util
+
 
 bucket_name = "cmtx-bot-storage"
 region = "us-east-1"
@@ -17,6 +19,7 @@ load_dotenv()
 # TODO: Add error handling
 # TODO: Fix to return a client
 
+util = util       
 
 s3_manager = s3fm.S3FileManager(aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
                                 aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
@@ -24,6 +27,11 @@ s3_manager = s3fm.S3FileManager(aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"
                                 bucket_name=bucket_name)
 
 
+def get_public_url(file_name,text='Open Pdf'):
+    url = s3_manager.get_public_url(file_name)
+    link_text = text
+    link_html = f'<a href="{url}" target="_blank">{link_text}</a>'
+    return link_html
 
 def get_s3_client():
     s3_client = boto3.client(
