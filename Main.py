@@ -96,13 +96,18 @@ def main():
     
     
     intro = """
-        Select a Drug coverage PDF to train a model on the information contained within it.  Then "ask" the bot a question about the the coverage.  
+        Select a Drug coverage PDF and upload to break the document up and store in a vector model.  They use OpenAI to leverage LLM's to understand questions and look for similar answers in the PDF data. Then "ask" the bot a question about the coverage.
 
-        - _What is the J code?_
-        - _Is there a pre authorization needed?_
-        - _etc..._
+- _What is the J code?_
+- _Is there a pre authorization needed?_
+- *What is the duration of coverage?*
+- _etc..._
+### How to use the demo
 
-        Search the internet for a new file and upload a document.  The model is not tuned for any specfic document.  Further work can be done to teach the model to "look" for sections and other clues in new files.
+1. Go to the "Coverage Files" tab and either select a coverage file that has been uploaded previously or upload a new file.
+2. Click on the "Chat" tab and let the model load into memory and then start asking questions.
+
+The purpose of this demo is to prototype different types of document parsing and embedding strategies while collecting typical "questions" we have about the coverage information.  
     """
     st.markdown(intro)
     
