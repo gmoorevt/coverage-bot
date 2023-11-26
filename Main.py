@@ -63,33 +63,18 @@ def readPDF2(pdf_reader):
        
 
 
-
-def loadfiles():
-        docs = docuploader.get_files()
-
-     # Iterate over the objects and print their names
-        container = st.container()
-        
-        for obj in docs['Contents']:
-            file_name = obj['Key']
-            file_url = docuploader.get_fileurl(file_name)
-            checkbox = container.checkbox(file_name)
-            if checkbox:
-                st.toast(file_name)
-                pdf_reader = docuploader.load_pdf_from_s3(file_name)
-                
-                checkbox = False
-                readPDF2(pdf_reader)
-                # Use the pdf_reader object as needed
-            container.markdown(f"[Download File]({file_url})")
-        
-        st.divider()
-        st.text('Upload your own PDF to train the bot on')
-
 def main():
     load_dotenv()
     st.set_page_config(page_title='CareMetx PDF reader')
     st.header('CareMetx Coverage Bot 💬')
+    if "benifit_file_slected" not in st.session_state:
+        st.session_state.benifit_file_slected = False
+    if "file_name" not in st.session_state:
+        st.session_state.file_name = None
+    st.sidebar.write(st.session_state.file_name)
+    st.sidebar.write(st.session_state.benifit_file_slected)
+    st.sidebar.write(st.session_state)
+
     
     
     intro = """
@@ -102,24 +87,6 @@ def main():
         Search the internet for a new file and upload a document.  The model is not tuned for any specfic document.  Further work can be done to teach the model to "look" for sections and other clues in new files.
     """
     st.markdown(intro)
-    
-
-    st.write('Upload a benifit coverage PDF and then "ask" the bot questions about it')
-    loadfiles()
-    
-    
-    pdf = st.file_uploader('Upload coverage pdf', type=['pdf'])
-    if pdf is not None:
-        # Upload file to s3
-        docuploader.save_file(pdf)
-        docuploader.get_files()
-
-
-import logging
-import boto3
-from botocore.exceptions import ClientError
-
-
     
         
 if __name__ == '__main__':

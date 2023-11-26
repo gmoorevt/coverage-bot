@@ -17,7 +17,7 @@ load_dotenv()
 # TODO: Add error handling
 # TODO: Fix to return a client
 
-print(region)
+
 s3_manager = s3fm.S3FileManager(aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
                                 aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
                                 region_name=region,
@@ -43,12 +43,9 @@ def save_file(fl):
     try:
         file_name = fl.name 
         s3 = get_s3() 
-        if s3.Bucket(bucket_name).put_object(Key=file_name, Body=fl):
-            print('file uploaded')
-        
-        else:
-            print("Paige broke it... ")
-
+        s3.Bucket(bucket_name).put_object(Key=file_name, Body=fl,
+                                             ContentType='application/pdf')
+                    
     except ClientError as e:
         print(e)
 
@@ -91,9 +88,4 @@ def load_pdf_from_s3(file_name):
     pdf_reader = PdfReader(BytesIO(pdf_data))
     return pdf_reader
 
-    # #s3 = boto3.resource("s3")
-    # s3 = get_s3_client()
-    # obj = s3.Object(bucket_name, file_name)
-    # fs = obj.get()["Body"].read()
-    # reader = PdfReader(BytesIO(fs))
-    # return reader
+    

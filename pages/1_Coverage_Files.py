@@ -1,0 +1,100 @@
+import streamlit as st
+import docuploader
+
+# Page title
+st.set_page_config(page_title='Coverage Files')
+st.header('Coverage Files')
+
+st.sidebar.write(st.session_state.file_name)
+st.sidebar.write(st.session_state.benifit_file_slected)
+st.sidebar.write(st.session_state)
+
+page_stale = False
+
+# Page header
+#st.write('Select a Drug coverage PDF or Upload a new one.')
+
+def file_selection_on_change():
+    st.session_state.file_name = st.session_state.file_selection
+    st.session_state.benifit_file_slected = True
+    st.toast(f"Selected file: {st.session_state.file_name}")
+
+def get_index_of_file(file_name,filelist):
+    try:
+        index = filelist.index(file_name)
+        return index
+    except ValueError:
+        return None
+
+placeholder = st.empty()
+
+with placeholder.container():
+    st.write('Loading files...')
+
+docs = docuploader.s3_manager.list_files()
+with placeholder.container():
+    st.write("Select a Drug coverage PDF or Upload a new one.")
+
+ls = docs
+filenames = []
+fileurl = []
+links = []
+
+for file in ls:
+    filenames.append(file)
+    # create lints
+    url = docuploader.s3_manager.get_public_url(file)
+    link_text = file
+    link_html = f'<a href="{url}" target="_blank">{link_text}</a>'
+    links.append(link_html)
+
+
+filegroup = st.radio('Select a file',filenames,
+                     index=get_index_of_file(st.session_state.file_name,filenames),
+                     key="file_selection",
+                     on_change=file_selection_on_change
+                     )
+
+
+
+
+#load_file_btn = st.button('Load File',disabled=True,key="load_file_btn")
+
+# if filegroup is not None:
+#     st.toast(f"Selected file: {filegroup}",key="file_selected_toast")
+#     st.session_state.file_name = filegroup
+#     st.session_state.benifit_file_slected = True
+#     placeholder.write(f"Selected file: {st.session_state.file_name}")
+    
+    
+
+if st.session_state.file_selection is not None:
+    load_file_btn = False
+    #load_file_btn = st.button(f'Load {st.session_state.file_selection} into the model',type='primary',key="load_file_btn_selected")
+    st.write(f'Ready to load {st.session_state.file_selection} into the model.  Click the "Chat" tab to start asking questions.')
+    st.markdown(f'<span style="border-radius:50%;">{"ColorMeBlue text"}</span>', unsafe_allow_html=True)
+
+
+
+
+st.divider()
+st.write('Upload a benifit coverage PDF and then "ask" the bot questions about it') 
+pdf = st.file_uploader('Upload coverage pdf', type=['pdf'])
+if pdf is not None:
+    # Upload file to s3
+    docuploader.save_file(pdf)
+    docuploader.get_files()
+    page_stale = True
+    
+
+
+st.subheader("Click to open a file and see it's contents")
+link_container = st.container()
+
+for l in links:
+    link_container.markdown(l,unsafe_allow_html=True)
+
+if page_stale:
+    print("rerun")
+    #st.rerun()
+    
