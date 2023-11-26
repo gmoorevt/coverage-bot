@@ -78,15 +78,16 @@ filegroup = st.radio('Select a file',filenames,
 if st.session_state.file_selection is not None:
     load_file_btn = False
     #load_file_btn = st.button(f'Load {st.session_state.file_selection} into the model',type='primary',key="load_file_btn_selected")
-    st.write(f'Ready to load {st.session_state.file_selection} into the model.  Click the "Chat" tab to start asking questions.')
-    st.markdown(f'<span style="border-radius:50%;">{"ColorMeBlue text"}</span>', unsafe_allow_html=True)
+    st.write(f'Ready to load {st.session_state.file_selection} into the model.')
+    st.write('Click the "Chat" tab to start asking questions.')
+    #st.markdown(f'<span style="background-color:#D3D3D3;">{"Coverage Bot is ready"}</span>', unsafe_allow_html=True)
 
 
 
 
 st.divider()
-st.write('Upload a benifit coverage PDF and then "ask" the bot questions about it') 
-pdf = st.file_uploader('Upload coverage pdf', type=['pdf'])
+st.write("Upload a benifit coverage PDF and then 'ask' the bot questions about it`s contents.") 
+pdf = st.file_uploader("Coverage file", type=['pdf'])
 if pdf is not None:
     # Upload file to s3
     docuploader.save_file(pdf)
@@ -94,14 +95,11 @@ if pdf is not None:
     page_stale = True
     
 
-
-st.subheader("Click to open a file and see it's contents")
+st.subheader("Click to open a file and see it's contents",divider=True)
 link_container = st.container()
 
 for l in links:
     link_container.markdown(l,unsafe_allow_html=True)
 
-if page_stale:
-    print("rerun")
-    #st.rerun()
+
     

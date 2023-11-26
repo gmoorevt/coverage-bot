@@ -21,8 +21,8 @@ load_dotenv()
 
 util = util       
 
-s3_manager = s3fm.S3FileManager(aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
-                                aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
+s3_manager = s3fm.S3FileManager(aws_access_key_id=st.secrets["AWS_ACCESS_KEY_ID"],
+                                aws_secret_access_key=st.secrets["AWS_SECRET_ACCESS_KEY"],
                                 region_name=region,
                                 bucket_name=bucket_name)
 
@@ -36,8 +36,8 @@ def get_public_url(file_name,text='Open Pdf'):
 def get_s3_client():
     s3_client = boto3.client(
         's3',
-        aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
-        aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"]
+        aws_access_key_id=st.secrets["AWS_ACCESS_KEY_ID"],
+        aws_secret_access_key=st.secrets["AWS_SECRET_ACCESS_KEY"]
     )
     return s3_client
 

@@ -68,9 +68,13 @@ def readPDF2(pdf_reader):
         st.session_state.messages.append({"role": "assistant", "content": full_response})   
 
 st.sidebar.divider()
-st.sidebar.subheader('Coverage File Loaded')
-st.sidebar.write(st.session_state.file_name)
-st.sidebar.markdown(docuploader.get_public_url(st.session_state.file_name),unsafe_allow_html=True)
+if st.session_state.file_name is not None:
+    st.sidebar.subheader('Coverage File Loaded')
+    st.sidebar.write(st.session_state.file_name)
+    st.sidebar.markdown(docuploader.get_public_url(st.session_state.file_name),unsafe_allow_html=True)
+else:
+    st.sidebar.subheader('No Coverage File Loaded')
+    st.sidebar.write('Please select or upload a file to get started.')
 
 # Debug info
 if st.session_state.debug:
