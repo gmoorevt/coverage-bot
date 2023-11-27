@@ -9,6 +9,8 @@ import util
 st.set_page_config(page_title='Coverage Files')
 st.header('Coverage Files')
 
+if "debug" not in st.session_state:
+    st.session_state.debug = False
 if st.session_state.debug:
     util.util.debug_info()
     

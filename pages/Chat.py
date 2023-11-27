@@ -77,6 +77,9 @@ else:
     st.sidebar.write('Please select or upload a file to get started.')
 
 # Debug info
+if "debug" not in st.session_state:
+    st.session_state.debug = False
+
 if st.session_state.debug:
         util.util.debug_info()
 
