@@ -20,7 +20,8 @@ page_stale = False
 def file_selection_on_change():
     st.session_state.file_name = st.session_state.file_selection
     st.session_state.benifit_file_slected = True
-    logger.log_session(st.session_state.user)
+    
+    st.session_state.db_session_id = logger.log_session(st.session_state.user)
     logger.update_session(st.session_state.db_session_id, {"file_name": st.session_state.file_name})
     st.toast(f"Selected file: {st.session_state.file_name}")
     if "messages" in st.session_state:
