@@ -1,21 +1,25 @@
 import streamlit as st
 
 import docuploader
-import util
+import util, chatbotlogger as cblogger
 
-
+logger = cblogger.ChatBotLogger()
 
 # Page title
 st.set_page_config(page_title='Coverage Files')
 st.header('Coverage Files')
+<<<<<<< HEAD
 
 if "debug" not in st.session_state:
     st.session_state.debug = False
 if st.session_state.debug:
     util.util.debug_info()
+=======
+if "debug" in st.session_state:
+    if st.session_state.debug:
+        util.util.debug_info()  
+>>>>>>> mongo
     
-
-
 page_stale = False
 
 # Page header
@@ -24,6 +28,8 @@ page_stale = False
 def file_selection_on_change():
     st.session_state.file_name = st.session_state.file_selection
     st.session_state.benifit_file_slected = True
+    logger.log_session(st.session_state.user)
+    logger.update_session(st.session_state.db_session_id, {"file_name": st.session_state.file_name})
     st.toast(f"Selected file: {st.session_state.file_name}")
     if "messages" in st.session_state:
         st.session_state.messages = []
@@ -65,8 +71,6 @@ filegroup = st.radio('Select a file',filenames,
                      )
 
 
-
-
 #load_file_btn = st.button('Load File',disabled=True,key="load_file_btn")
 
 # if filegroup is not None:
@@ -79,15 +83,13 @@ filegroup = st.radio('Select a file',filenames,
 
 if st.session_state.file_selection is not None:
     load_file_btn = False
-    #load_file_btn = st.button(f'Load {st.session_state.file_selection} into the model',type='primary',key="load_file_btn_selected")
     st.write(f'Ready to load {st.session_state.file_selection} into the model.')
     st.write('Click the "Chat" tab to start asking questions.')
-    #st.markdown(f'<span style="background-color:#D3D3D3;">{"Coverage Bot is ready"}</span>', unsafe_allow_html=True)
-
-
-
+    
 
 st.divider()
+
+# PDF upload
 st.write("Upload a benifit coverage PDF and then 'ask' the bot questions about it`s contents.") 
 pdf = st.file_uploader("Coverage file", type=['pdf'])
 if pdf is not None:
@@ -96,7 +98,7 @@ if pdf is not None:
     docuploader.get_files()
     page_stale = True
     
-
+# Open PDF file in new window
 st.subheader("Click to open a file and see it's contents",divider=True)
 link_container = st.container()
 
