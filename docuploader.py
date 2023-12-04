@@ -72,21 +72,6 @@ def get_files():
     return response
 
 
-
-
-def get_fileurl(file_name):
-    try:
-        s3 = boto3.client('s3', aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
-                         aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],region_name=region)
-
-        s3.generate_presigned_url(
-                'get_object',
-                Params={'Bucket': bucket_name, 'Key': file_name},
-                ExpiresIn=36000  # URL expiration time in seconds
-        )
-    except ClientError as e:
-        print(e)
-
 def load_pdf_from_s3(file_name):
     s3 = get_s3()
     obj = s3.Object(bucket_name, file_name)
