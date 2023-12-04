@@ -8,15 +8,24 @@ from langchain.vectorstores import FAISS
 from langchain.llms import OpenAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.callbacks import get_openai_callback
-import docuploader,util
+import docuploader,util, chatbotlogger as cblogger
 
 # Page title
 st.set_page_config(page_title='Chatbot')
 st.header('Chatbot')
 
-
 def readPDF2(pdf_reader):
 
+    # Create session logger
+
+    clogger = cblogger.ChatBotLogger()
+    
+    
+
+    clogger.update_session(st.session_state.db_session_id, {"file_name": st.session_state.file_name})
+
+    
+    
     # load model
     text = ""
     
@@ -37,19 +46,23 @@ def readPDF2(pdf_reader):
     knowledge_base = FAISS.from_texts(chunks,embeddings)
     # end model
 
-
+    # Create session logger
+    if "db_session_id" not in st.session_state:
+        st.session_state.db_session_id = clogger.log_session(st.session_state.user)
+    
+       
 
     if "messages" not in st.session_state:
          st.session_state.messages = []
 
     for message in st.session_state.messages:
-        with st.chat_message(message["role"]): #chat_container
-            st.markdown(message["content"]) #chat_container
+        with st.chat_message(message["role"]): 
+            st.markdown(message["content"]) 
         
     if prompt := st.chat_input("Ask questions about the coverage..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"): #chat_container
-            st.markdown(prompt) #chat_container
+        with st.chat_message("user"): 
+            st.markdown(prompt) 
 
         with st.chat_message("assistant"):
              
@@ -65,7 +78,8 @@ def readPDF2(pdf_reader):
                 full_response += response
                 message_placeholder.markdown(full_response + "▌")
             message_placeholder.markdown(full_response)
-        st.session_state.messages.append({"role": "assistant", "content": full_response})   
+        st.session_state.messages.append({"role": "assistant", "content": full_response}) 
+        clogger.log_message(st.session_state.user, st.session_state.db_session_id,prompt,full_response)  
 
 st.sidebar.divider()
 if st.session_state.file_name is not None:
@@ -91,8 +105,6 @@ else:
     pdf = docuploader.load_pdf_from_s3(st.session_state.file_name)
 
     readPDF2(pdf)
-
-
 
 botcontainer = st.container()
 
