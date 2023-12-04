@@ -20,12 +20,11 @@ def readPDF2(pdf_reader):
 
     clogger = cblogger.ChatBotLogger()
     
-    
+    if "db_session_id" not in st.session_state: 
+        st.session_state.db_session_id = clogger.log_session(st.session_state.user)
 
     clogger.update_session(st.session_state.db_session_id, {"file_name": st.session_state.file_name})
 
-    
-    
     # load model
     text = ""
     
@@ -50,8 +49,6 @@ def readPDF2(pdf_reader):
     if "db_session_id" not in st.session_state:
         st.session_state.db_session_id = clogger.log_session(st.session_state.user)
     
-       
-
     if "messages" not in st.session_state:
          st.session_state.messages = []
 
@@ -91,9 +88,6 @@ else:
     st.sidebar.write('Please select or upload a file to get started.')
 
 # Debug info
-if "debug" not in st.session_state:
-    st.session_state.debug = False
-
 if st.session_state.debug:
         util.util.debug_info()
 
@@ -104,9 +98,7 @@ if st.session_state.file_name is None:
     placeholder.write('Select a Drug coverage PDF.')
 else:
     placeholder.write(f"Selected file: {st.session_state.file_name}")
-
     pdf = docuploader.load_pdf_from_s3(st.session_state.file_name)
-
     readPDF2(pdf)
 
 botcontainer = st.container()
