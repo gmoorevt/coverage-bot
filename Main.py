@@ -42,7 +42,7 @@ def main():
     
     intro = """
         
-This is a prototype to lean how LLM models and PDF chunking algorithms can be applied to extract specific  information from random health insurance public files.
+This is a prototype designed to lean how LLM models and PDF chunking algorithms can be applied to extract specific  information from random health insurance public files.
 
 A chat interface is used to create a mechanism to collect insights into the types of information that is of interest in a file.  
 
