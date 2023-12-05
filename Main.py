@@ -54,15 +54,14 @@ To use the prototype, either select a file that has been uploaded previously or 
 
 Then "ask" the bot a question about the coverage.
 
-        - _What is the J code?_
-	-_What are the warnings?_
-        - _Is there a pre authorization needed?_
+- What is the J code?
+	- What are the warnings?
+        - Is there a pre authorization needed?
         - *What is the duration of coverage?*
-        - _etc..._
-        ### How to use the demo
-
-        1. Go to the "Coverage Files" tab and either select a coverage file that has been uploaded previously or upload a new file.
-        2. Click on the "Chat" tab and let the model load into memory and then start asking questions. 
+        - etc...
+### How to use the demo
+1. Go to the "Coverage Files" tab and either select a coverage file that has been uploaded previously or upload a new file.
+2. Click on the "Chat" tab and let the model load into memory and then start asking questions. 
     """
     st.markdown(intro)
     
