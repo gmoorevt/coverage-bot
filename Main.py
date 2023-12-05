@@ -41,18 +41,28 @@ def main():
         st.session_state.debug = False
     
     intro = """
-        Select a Drug coverage PDF and upload to break the document up and store in a vector model.  They use OpenAI to leverage LLM's to understand questions and look for similar answers in the PDF data. Then "ask" the bot a question about the coverage.
+        
+This is a prototype to lean how LLM models and PDF chunking algorithms can be applied to extract specific  information from random health insurance public files.
+
+A chat interface is used to create a mechanism to collect insights into the types of information that is of interest in a file.  
+
+The model is not trained on any specific file format to ensure the approach is scalable across any file format created by a health insurance  provider.
+
+The file selected will be parsed and loaded into a vector database.  A combination of similarity algorithms are run and then fed to OpenAI to format the response in a coherent result.  
+
+To use the prototype, either select a file that has been uploaded previously or upload a new file.
+
+Then "ask" the bot a question about the coverage.
 
         - _What is the J code?_
+	-_What are the warnings?_
         - _Is there a pre authorization needed?_
         - *What is the duration of coverage?*
         - _etc..._
         ### How to use the demo
 
         1. Go to the "Coverage Files" tab and either select a coverage file that has been uploaded previously or upload a new file.
-        2. Click on the "Chat" tab and let the model load into memory and then start asking questions.
-
-        The purpose of this demo is to prototype different types of document parsing and embedding strategies while collecting typical "questions" we have about the coverage information.  
+        2. Click on the "Chat" tab and let the model load into memory and then start asking questions. 
     """
     st.markdown(intro)
     
